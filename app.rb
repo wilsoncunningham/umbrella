@@ -58,9 +58,11 @@ next_hours[1..12].each_with_index do |hourly_data, idx|
   timestamp = hourly_data["time"]
   time = Time.at(timestamp).utc
   puts "#{hourly_data["temperature"]} degrees"
+end
 
+next_hours[1..12].each_with_index do |hourly_data, idx|
   precip_prob = hourly_data["precipProbability"] 
-  if precip_prob > 0.1
-    print "There is a #{(precip_prob*100).to_i}% chance of precipitation #{idx + 1} hours from now"
-  end
+    if precip_prob > 0.1
+      print "There is a #{(precip_prob*100).to_i}% chance of precipitation #{idx + 1} hours from now\n"
+    end
 end
