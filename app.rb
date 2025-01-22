@@ -28,9 +28,9 @@ pp pirate_weather_url
 
 pirate_response_raw = HTTP.get(pirate_weather_url)
 pirate_response_parsed = JSON.parse(pirate_response_raw)
-# pp pirate_response_parsed
+pp pirate_response_parsed
 
 current_temp = pirate_response_parsed.fetch("currently").fetch("temperature")
 # pp current_temp
 
-pp "The current temperature at '#{location}' is #{current_temp} degrees"
+# pp "The current temperature at '#{location}' is #{current_temp} degrees"
