@@ -24,13 +24,22 @@ lat, lng = google_response_parsed.fetch("results")[0].fetch("geometry").fetch("l
 
 
 pirate_weather_url = "https://api.pirateweather.net/forecast/" + PIRATE_WEATHER_KEY + "/#{lat},#{lng}"
-pp pirate_weather_url
+# pp pirate_weather_url
 
 pirate_response_raw = HTTP.get(pirate_weather_url)
 pirate_response_parsed = JSON.parse(pirate_response_raw)
-pp pirate_response_parsed
+# pp pirate_response_parsed
 
 current_temp = pirate_response_parsed.fetch("currently").fetch("temperature")
-# pp current_temp
 
-# pp "The current temperature at '#{location}' is #{current_temp} degrees"
+pp "The current temperature at '#{location}' is #{current_temp} degrees"
+
+next_hour_conditions, next_hour_temp = pirate_response_parsed.fetch("hourly").fetch("data")[0].fetch("summary"),
+                                        pirate_response_parsed.fetch("hourly").fetch("data")[0].fetch("temperature")
+
+pp "In an hour, it will be #{next_hour_conditions.downcase} and #{next_hour_temp} degrees"
+
+
+next_hours = pirate_response_parsed.fetch("hourly").fetch("data")
+
+
