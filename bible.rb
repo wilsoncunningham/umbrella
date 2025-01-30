@@ -6,15 +6,20 @@ require "dotenv/load"
 ESV_API_KEY = ENV.fetch("ESV_API_KEY")
 API_URL = "https://api.esv.org/v3/passage/text/"
 
-passage = "John 3:16"
+
+
+puts "Please search a bible passage"
+passage = gets.chomp
+# passage = "Jonah 1-2"
+
 
 def get_esv_text(passage)
   params = {
       "q": passage,
-      "include-headings": false,
+      "include-headings": true,
       "include-footnotes": false,
-      "include-verse-numbers": false,
-      "include-short-copyright": false,
+      "include-verse-numbers": true,
+      "include-short-copyright": true,
       "include-passage-references": false
   }
 
@@ -22,15 +27,14 @@ def get_esv_text(passage)
       "Authorization": "Token #{ESV_API_KEY}"
   }
 
-  response = HTTP.get(API_URL, params=params, headers=headers)
+  response = HTTP.headers(headers).get(API_URL, params: params)
+  # puts HTTP.headers(headers)
+  # puts response
 
-  passages = response.json()["passages"]
+  body = JSON.parse(response.body.to_s)
+  passages = body["passages"]
 
-  if passages
-    return passages[0].strip()
-  else
-    "Error: Passage not found"
-  end
+  passages.any? ? passages[0].strip : "Error: Passage not found"
 end
 
 puts get_esv_text(passage)
