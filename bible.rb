@@ -42,31 +42,22 @@ end
 
 ########################################
 
-# client = OpenAI::Client.new(access_token: ENV.fetch("OPENAI_API_KEY"))
-# message_list = [
-#   {
-#     "role" => "system",
-#     "content" => "You are a helpful assistant. When asked about Bible passages, you will respond strictly with a list of the passage references,\
-#       each separated by a comma with no whitespace. If you have no Bible passage references that match the question, respond with "
-#   }
-# ]
-
-
-def ai_search_passage()
-  puts "Hello! How can I help you today?"
-  puts "-"*50
+def ai_search_passages()
+  puts "Find a passage that references:"
 
   client = OpenAI::Client.new(access_token: ENV.fetch("OPENAI_API_KEY"))
   message_list = [
     {
       "role" => "system",
       "content" => "You are a helpful assistant. When asked about Bible passages, you will respond strictly with a list of the passage references,\
-        each separated by a comma with no whitespace. If you have no Bible passage references that match the question, respond with "
+        each separated by a comma with no whitespace. If you have no Bible passage references that match the question, respond with 'No passages found'"
     }
   ]
 
-  query = gets.chomp
-  # query = "How do I compute 5*5?"
+  user_input = gets.chomp
+  query = "Find all Bible passages that reference: #{user_input}"
+
+  message_list.append({"role" => "user","content" => query})
 
   # Call the API to get the next message from GPT
   api_response = client.chat(
@@ -76,14 +67,21 @@ def ai_search_passage()
     }
   )
 
-  # pp api_response
-
   ai_message = api_response["choices"][0].fetch("message").fetch("content")
-  puts ai_message
-  puts "-"*50
+  return ai_message
 end
 
-ai_search_passage()
+
+ai_message = ai_search_passages()
+if ai_message != "No passages found"
+  passages_list =  ai_message.split(",")
+end
+
+if passages_list
+  passages_list.each do |passage|
+    puts get_esv_text(passage)
+  end
+end
 
 
 ##########################################################
