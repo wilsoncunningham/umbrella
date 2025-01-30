@@ -78,8 +78,26 @@ if ai_message != "No passages found"
 end
 
 if passages_list
+  puts "The following passages reference your input:\n"
   passages_list.each do |passage|
-    puts get_esv_text(passage)
+    # puts get_esv_text(passage)
+    puts passage
+  end
+
+  puts "Would you like to read any of these? (yes/no)"
+  user_read = gets.chomp
+
+  if user_read.downcase == "yes"
+    passages_list.each do |passage|
+      puts "-"*60
+      puts "Would you like to read #{passage}? (yes/no)"
+      puts "-"*60
+      user_read_passage = gets.chomp
+      puts "\n\n"
+      if user_read_passage == "yes"
+        puts get_esv_text(passage)
+      end
+    end
   end
 end
 
