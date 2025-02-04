@@ -43,26 +43,25 @@ end
 ########################################
 
 def ai_search_passages()
-  puts "Find a passage that references:"
+  puts "Find passages that mention:"
 
   client = OpenAI::Client.new(access_token: ENV.fetch("OPENAI_API_KEY"))
   message_list = [
     {
       "role" => "system",
-      "content" => "You are a helpful assistant. When asked about Bible passages, you will respond strictly with a list of the passage references,\
-        each separated by a comma with no whitespace. If you have no Bible passage references that match the question, respond with 'No passages found'"
+      "content" => "You are a helpful assistant, specialized in finding Bible passages. You have two possible responses. (1) If you have no Bible passage references that match the question, respond with 'No passages found'. (2) If you do find Bible passages that fit the question, you will respond strictly with a list of the passage references, each separated by a comma with no whitespace. Note that the Bible passages may be as short as one verse and as long as 1 chapter."
     }
   ]
 
   user_input = gets.chomp
-  query = "Find all Bible passages that reference: #{user_input}"
+  query = "Find all Bible passages that mention: #{user_input}"
 
   message_list.append({"role" => "user","content" => query})
 
   # Call the API to get the next message from GPT
   api_response = client.chat(
     parameters: {
-      model: "gpt-3.5-turbo",
+      model: "gpt-4o-mini",
       messages: message_list
     }
   )
